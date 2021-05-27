@@ -8,17 +8,11 @@ const client = new twitter({
 });
 
 exports.handler = async (event) => {
-  const params = {
-    screen_name: event.queryStringParameters.name,
-    count: 180,
-  };
-
+  const params = { screen_name: event.queryStringParameters.name, count: 180 };
   if (event.queryStringParameters.maxid) {
     params.max_id = Number(event.queryStringParameters.maxid);
   }
-
   const tweets = await getTweets(params);
-
   return {
     statusCode: 200,
     headers: {
@@ -30,11 +24,9 @@ exports.handler = async (event) => {
   };
 };
 
-const getTweets = (params) => {
+const getTweets = function (params) {
   return new Promise((resolve, reject) => {
-    client.get('favorites/list', params, (error, tweets, response) => {
-      console.log(response);
-
+    client.get('favorites/list', params, function (error, tweets, response) {
       if (!error) {
         resolve(extractData(tweets));
       } else {
@@ -45,9 +37,8 @@ const getTweets = (params) => {
   });
 };
 
-const extractData = (tweets) => {
+const extractData = function (tweets) {
   var images = { url: [], source: [], height: [], max_id: 0 };
-
   tweets.forEach((tweet) => {
     if (tweet.entities.media) {
       if (tweet.entities.media[0].type == 'photo') {
@@ -61,9 +52,7 @@ const extractData = (tweets) => {
       }
     }
   });
-
   const max_id = tweets[tweets.length - 1].id - 10000;
   images.max_id = max_id;
-
   return images;
 };
