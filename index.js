@@ -8,11 +8,18 @@ const client = new twitter({
 });
 
 exports.handler = async (event) => {
-  const name = event.queryStringParameters.name || 'hokkaido_9love';
-  const maxid = event.queryStringParameters.maxid;
-  const params = { screen_name: name, count: 180 };
-  if (maxid) {
-    params.max_id = Number(maxid);
+  const params = { screen_name: 'MooMoo_Farm', count: 180 };
+
+  if (event.queryStringParameters !== null) {
+    const screen_name = event.queryStringParameters.name;
+    if (screen_name !== undefined) {
+      params.screen_name = screen_name;
+    }
+
+    const maxid = event.queryStringParameters.maxid;
+    if (maxid !== undefined) {
+      params.max_id = Number(maxid);
+    }
   }
 
   const tweets = await getTweets(params);
