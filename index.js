@@ -10,7 +10,8 @@ const client = new twitter({
 exports.handler = async (event) => {
   const params = { screen_name: 'MooMoo_Farm', count: 180 };
 
-  if (event.queryStringParameters !== null) {
+  console.log(event.queryStringParameters);
+  if (event.queryStringParameters !== undefined) {
     const screen_name = event.queryStringParameters.name;
     if (screen_name !== undefined) {
       params.screen_name = screen_name;
